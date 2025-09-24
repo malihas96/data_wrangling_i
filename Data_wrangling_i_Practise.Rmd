@@ -1,0 +1,7 @@
+---
+title: "Data_wrangling_i"
+date: "09.16.2025"
+output: html_document
+---
+
+
