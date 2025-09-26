@@ -1,7 +1,173 @@
 ---
 title: "Data_wrangling_i"
 date: "09.16.2025"
-output: html_document
+output: github_document
 ---
 
+```{r setup} 
+library(tidyverse)
+```
 
+## Read some data, but first import it, and make variable names all lower case.
+
+```{r}
+litters_df = read_csv(file = "./data_import_examples/FAS_litters.csv")
+```
+
+```{r clean up variable names after importing data}
+names(litters_df)
+
+## use the janitor :: clean_names() function to put the variable names into snake lower case
+
+litters_df = janitor::clean_names(litters_df)
+names(litters_df)
+```
+
+## Importing the pups_df, and making all variables lower case.
+
+```{r}
+pups_df = read_csv(file = "./data_import_examples/FAS_pups.csv")
+
+names(pups_df)
+
+## use the janitor :: clean_names() function to put the variable names into snake lower case
+
+litters_df = janitor::clean_names(pups_df)
+names(pups_df)
+```
+
+
+### Looking at the data, and the head and tail.
+```{r}
+litters_df
+
+head(litters_df, 5)
+
+tail(litters_df, 5)
+```
+
+
+### Using the skimr function to quickly look at data.
+
+```{r}
+skimr::skim(litters_df)
+```
+
+
+### Arguments to read
+
+```{r}
+litters_df = 
+    read_csv(file = "./data_import_examples/FAS_litters.csv",
+    skip = 10, col_names = FALSE)
+
+head(litters_df)
+```
+
+
+### Excluding the missing vaulues
+
+```{r}
+litters_df = 
+    read_csv(
+        file = "./data_import_examples/FAS_litters.csv",
+        na = c(".", "NA", ""))
+head(litters_df)
+```
+
+### Parsing columns
+
+`In some cases, you’ll want to give explicit column specifications. This is done using the cols function, where you can give each column a type.`
+
+```{r}
+litters_df = 
+    read_csv(file = "./data_import_examples/FAS_litters.csv",
+        na = c(".", "NA", ""),
+    col_types = cols(
+      Group = col_character(),
+      `Litter Number` = col_character(),
+      `GD0 weight` = col_double(),
+      `GD18 weight` = col_double(),
+      `GD of Birth` = col_integer(),
+      `Pups born alive` = col_integer(),
+      `Pups dead @ birth` = col_integer(),
+      `Pups survive` = col_integer()
+    )
+  )
+
+tail(litters_df)
+```
+
+`Note that you don’t have to specify the variable type for every column, and can only focus on ones that are difficult:`
+
+```{r}
+litters_df = 
+    read_csv(file = "./data_import_examples/FAS_litters.csv",
+        na = c(".", "NA", ""),
+    col_types = cols(
+      Group = col_factor()
+    )
+)
+
+head(litters_df)
+```
+
+
+#### Learning Assessment 1 
+
+```{r}
+pups_df = 
+    read_csv(file = "./data_import_examples/FAS_pups.csv",
+    skip = 3, col_names = FALSE)
+
+head(pups_df)
+```
+ 
+ `excluding missing values.`
+ 
+```{r}
+pups_df = 
+    read_csv(
+        file = "./data_import_examples/FAS_pups.csv",
+        skip = 3,
+        na = c(".", "NA", ""))
+head(pups_df)
+```
+ 
+ `parsing columns`
+ 
+```{r}
+pups_df = 
+    read_csv(file = "./data_import_examples/FAS_pups.csv",
+        skip = 3,
+        na = c(".", "NA", ""),
+    col_types = cols(
+      `...1` = col_factor(),
+      `1 = male, 2 = female` = col_double(),
+      `...3` = col_double(),
+      `...4` = col_double(),
+      `...5` = col_double(),
+      `...6` = col_double(),
+      
+    )
+  )
+
+skimr::skim(pups_df)
+```
+ 
+ `This works as well`
+ 
+```{r}
+pups_df = 
+    read_csv("./data_import_examples/FAS_pups.csv",
+        na = c(".", "NA"), col_types = "fddddd")
+
+skimr::skim(pups_df)
+```
+ 
+ 
+
+### Other file formats
+
+
+ 
